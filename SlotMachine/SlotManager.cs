@@ -23,6 +23,7 @@
             { WildcardSymbol, 0 }
         };
 
+        //method is made public to be unit tested
         public static decimal Spin(decimal stake)
         {
             var matrix = new char [Rows, Columns];
@@ -30,8 +31,7 @@
             FillMatrixWithRandomValues(matrix);
             PrintMatrix(matrix);
 
-            var totalCoefficient = GetCoefficient(matrix);
-            var winnings = (decimal)totalCoefficient * stake;
+            var winnings = CalculateWinnings(matrix, stake);
 
             Console.WriteLine($"You have won: {winnings}");
             return winnings;
@@ -76,7 +76,7 @@
             Console.Write(Environment.NewLine);
         }
 
-        private static double GetCoefficient(char[,] matrix)
+        public static decimal CalculateWinnings(char[,] matrix, decimal stake)
         {
             var coefficient = 0.0;
             for (var row = 0; row < Rows; row++)
@@ -97,7 +97,7 @@
                 }
             }
 
-            return coefficient;
+            return (decimal)coefficient * stake;
         }
 
         private static bool CheckCurrentLine(IEnumerable<char> values)
