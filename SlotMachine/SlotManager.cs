@@ -1,43 +1,35 @@
-﻿namespace SlotMachine
+﻿using SlotMachine.Interfaces;
+using SlotMachine.Models;
+
+namespace SlotMachine
 {
-    public static class SlotManager
+    public class SlotManager : ISlotManager
     {
         private const int Rows = 4;
         private const int Columns = 3;
 
-        private const char AppleSymbol = 'A';
-        private const char BananaSymbol = 'B';
-        private const char PineappleSymbol = 'P';
-        private const char WildcardSymbol = '*';
-
-        private const double ProbabilityOfA = 0.45;
-        private const double ProbabilityOfB = 0.35;
-        private const double ProbabilityOfP = 0.15;
-        //Based on the above values the Probability Of Wildcard is 0.05;
-
         private static readonly Dictionary<char, double> PayoutMapping = new()
         {
-            { AppleSymbol, 0.4 },
-            { BananaSymbol, 0.6 },
-            { PineappleSymbol, 0.8 },
-            { WildcardSymbol, 0 }
+            { Configuration.AppleSymbol, Configuration.AppleCoefficient },
+            { Configuration.BananaSymbol, Configuration.BananaCoefficient },
+            { Configuration.PineappleSymbol, Configuration.PineappleCoefficient },
+            { Configuration.WildcardSymbol, Configuration.WildcardCoefficient }
         };
 
-        //method is made public to be unit tested
-        public static decimal Spin(decimal stake)
+        public decimal Spin(decimal stake)
         {
-            var matrix = new char [Rows, Columns];
+            var matrix = new Symbol [Rows, Columns];
 
             FillMatrixWithRandomValues(matrix);
             PrintMatrix(matrix);
 
             var winnings = CalculateWinnings(matrix, stake);
 
-            Console.WriteLine($"You have won: {winnings}");
+            Console.WriteLine($"You have won: {Math.Round(winnings, 2)}");
             return winnings;
         }
 
-        private static void FillMatrixWithRandomValues(char[,] matrix)
+        private static void FillMatrixWithRandomValues(Symbol[,] matrix)
         {
             for (var row = 0; row < Rows; row++)
             {
@@ -48,26 +40,29 @@
             }
         }
 
-        private static char GetRandomResult()
+        private static Symbol GetRandomResult()
         {
             var randomGenerator = new Random();
-            return randomGenerator.NextDouble() switch
+
+            var rndChar = randomGenerator.NextDouble() switch
             {
-                < ProbabilityOfA => AppleSymbol,
-                < ProbabilityOfA + ProbabilityOfB => BananaSymbol,
-                < ProbabilityOfA + ProbabilityOfB + ProbabilityOfP => PineappleSymbol,
-                _ => WildcardSymbol
+                < Configuration.ProbabilityOfA => Configuration.AppleSymbol,
+                < Configuration.ProbabilityOfA + Configuration.ProbabilityOfB => Configuration.BananaSymbol,
+                < Configuration.ProbabilityOfA + Configuration.ProbabilityOfB + Configuration.ProbabilityOfP => Configuration.PineappleSymbol,
+                _ => Configuration.WildcardSymbol
             };
+
+            return SymbolFactory.GetSymbol(rndChar);
         }
 
-        private static void PrintMatrix(char[,] matrix)
+        private static void PrintMatrix(Symbol[,] matrix)
         {
             Console.Write(Environment.NewLine);
             for (var row = 0; row < Rows; row++)
             {
                 for (var col = 0; col < Columns; col++)
                 {
-                    Console.Write(matrix[row, col]);
+                    Console.Write(matrix[row, col].GetSymbol());
                 }
 
                 Console.Write(Environment.NewLine);
@@ -76,7 +71,8 @@
             Console.Write(Environment.NewLine);
         }
 
-        public static decimal CalculateWinnings(char[,] matrix, decimal stake)
+        //method is made public to be unit tested
+        public static decimal CalculateWinnings(Symbol[,] matrix, decimal stake)
         {
             var coefficient = 0.0;
             for (var row = 0; row < Rows; row++)
@@ -84,7 +80,7 @@
                 var valuesOnCurrentRow = new char[Columns];
                 for (var col = 0; col < Columns; col++)
                 {
-                    valuesOnCurrentRow[col] = matrix[row, col];
+                    valuesOnCurrentRow[col] = matrix[row, col].GetSymbol();
                 }
 
                 var isCurrentLineAWinner = CheckCurrentLine(valuesOnCurrentRow);
@@ -97,12 +93,12 @@
                 }
             }
 
-            return (decimal)coefficient * stake;
+            return Math.Round((decimal)coefficient * stake, 2, MidpointRounding.ToEven);
         }
 
         private static bool CheckCurrentLine(IEnumerable<char> values)
         {
-            var valuesWithoutWildcard = values.Where(c => c != WildcardSymbol).ToArray();
+            var valuesWithoutWildcard = values.Where(c => c != Configuration.WildcardSymbol).ToArray();
             if (valuesWithoutWildcard.Length < Columns - 1)
             {
                 return true; //line contains only wildcard symbols or wildcard symbols + 1 other

@@ -1,3 +1,5 @@
+using SlotMachine.Models;
+
 namespace SlotMachine.Tests
 {
     public class SlotManagerTests
@@ -10,12 +12,12 @@ namespace SlotMachine.Tests
         [Test]
         public void NoWinningLines()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 0;
@@ -26,12 +28,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfApplesWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'A', 'A' }, //3 * 0.4
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() }, //3 * 0.4
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 1.2;
@@ -42,12 +44,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfBananasWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'B', 'P' },
-                { 'B', 'B', 'B' }, //3 * 0.6
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new BananaSymbol(), new BananaSymbol(), new BananaSymbol() }, //3 * 0.6
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 1.8;
@@ -58,12 +60,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfPineapplesWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'P', 'P', 'P' }, //3 * 0.8
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new PineappleSymbol(), new PineappleSymbol(), new PineappleSymbol() }, //3 * 0.8
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 2.4;
@@ -74,12 +76,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfApplesAndOneLineOfBananasWin()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'A', 'A' }, //3 * 0.4
-                { 'B', 'B', 'B' }, //3 * 0.6
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() }, //3 * 0.4
+                { new BananaSymbol(), new BananaSymbol(), new BananaSymbol() }, //3 * 0.6
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 3;
@@ -90,12 +92,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfApplesAndOneLineOfBananasAndOneLineOfPineapplesWin()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'A', 'A' }, //3 * 0.4
-                { 'B', 'B', 'B' }, //3 * 0.6
-                { 'P', 'P', 'P' }, //3 * 0.8
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() }, //3 * 0.4
+                { new BananaSymbol(), new BananaSymbol(), new BananaSymbol() }, //3 * 0.6
+                { new PineappleSymbol(), new PineappleSymbol(), new PineappleSymbol() }, //3 * 0.8
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 5.4;
@@ -106,12 +108,12 @@ namespace SlotMachine.Tests
         [Test]
         public void ApplesEverywhereWin()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'A', 'A' }, //3 * 0.4
-                { 'A', 'A', 'A' }, //3 * 0.4
-                { 'A', 'A', 'A' }, //3 * 0.4
-                { 'A', 'A', 'A' } //3 * 0.4
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() }, //3 * 0.4
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() }, //3 * 0.4
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() }, //3 * 0.4
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() } //3 * 0.4
             };
 
             var expected = 4.8;
@@ -122,12 +124,12 @@ namespace SlotMachine.Tests
         [Test]
         public void BananasEverywhereWin()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'B', 'B', 'B' }, //3 * 0.6
-                { 'B', 'B', 'B' }, //3 * 0.6
-                { 'B', 'B', 'B' }, //3 * 0.6
-                { 'B', 'B', 'B' } //3 * 0.6
+                { new BananaSymbol(), new BananaSymbol(), new BananaSymbol() }, //3 * 0.6
+                { new BananaSymbol(), new BananaSymbol(), new BananaSymbol() }, //3 * 0.6
+                { new BananaSymbol(), new BananaSymbol(), new BananaSymbol() }, //3 * 0.6
+                { new BananaSymbol(), new BananaSymbol(), new BananaSymbol() } //3 * 0.6
             };
 
             var expected = 7.2;
@@ -138,12 +140,12 @@ namespace SlotMachine.Tests
         [Test]
         public void PineapplesEverywhereWin()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'P', 'P', 'P' }, //3 * 0.8
-                { 'P', 'P', 'P' }, //3 * 0.8
-                { 'P', 'P', 'P' }, //3 * 0.8
-                { 'P', 'P', 'P' } //3 * 0.8
+                { new PineappleSymbol(), new PineappleSymbol(), new PineappleSymbol() }, //3 * 0.8
+                { new PineappleSymbol(), new PineappleSymbol(), new PineappleSymbol() }, //3 * 0.8
+                { new PineappleSymbol(), new PineappleSymbol(), new PineappleSymbol() }, //3 * 0.8
+                { new PineappleSymbol(), new PineappleSymbol(), new PineappleSymbol() } //3 * 0.8
             };
 
             var expected = 9.6;
@@ -154,12 +156,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfApplesWithOneWildcardSymbolWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', '*', 'A' }, //0.4 + 0 + 0.4
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new WildcardSymbol(), new AppleSymbol() }, //0.4 + 0 + 0.4
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 0.8;
@@ -170,12 +172,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfBananasWithOneWildcardSymbolWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'B', 'P' },
-                { '*', 'B', 'B' }, //0 + 0.6 + 0.6
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new WildcardSymbol(), new BananaSymbol(), new BananaSymbol() }, //0 + 0.6 + 0.6
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 1.2;
@@ -186,12 +188,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfPineapplesWithOneWildcardSymbolWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'P', 'P', '*' }, //0.8 + 0.8 + 0
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new PineappleSymbol(), new PineappleSymbol(), new WildcardSymbol() }, //0.8 + 0.8 + 0
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 1.6;
@@ -202,12 +204,12 @@ namespace SlotMachine.Tests
         [Test]
         public void MixOfApplesBananasAndPineapplesWithOneWildcardSymbolEachWin()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', '*', 'A' }, //0.4 + 0 + 0.4
-                { '*', 'B', 'B' }, //0 + 0.6 + 0.6
-                { 'P', 'P', '*' }, //0.8 + 0.8 + 0
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new WildcardSymbol(), new AppleSymbol() }, //0.4 + 0 + 0.4
+                { new WildcardSymbol(), new BananaSymbol(), new BananaSymbol() }, //0 + 0.6 + 0.6
+                { new PineappleSymbol(), new PineappleSymbol(), new WildcardSymbol() }, //0.8 + 0.8 + 0
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 3.6;
@@ -218,12 +220,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfApplesWithTwoWildcardSymbolsWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { '*', '*', 'A' }, //0 + 0 + 0.4
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new WildcardSymbol(), new WildcardSymbol(), new AppleSymbol() }, //0 + 0 + 0.4
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 0.4;
@@ -234,12 +236,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfBananasWithTwoWildcardSymbolsWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'B', 'P' },
-                { '*', 'B', '*' }, //0 + 0.6 + 0
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new WildcardSymbol(), new BananaSymbol(), new WildcardSymbol() }, //0 + 0.6 + 0
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 0.6;
@@ -250,12 +252,12 @@ namespace SlotMachine.Tests
         [Test]
         public void OneLineOfPineapplesWithTwoWildcardSymbolsWins()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'P', '*', '*' }, //0.8 + 0 + 0
-                { 'A', 'B', 'P' }
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new PineappleSymbol(), new WildcardSymbol(), new WildcardSymbol() }, //0.8 + 0 + 0
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 0.8;
@@ -266,12 +268,12 @@ namespace SlotMachine.Tests
         [Test]
         public void MixOfApplesBananasAndPineapplesWithTwoWildcardSymbolsEachWin()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { '*', '*', 'A' }, //0 + 0 + 0.4
-                { '*', 'B', '*' }, //0 + 0.6 + 0
-                { 'P', '*', '*' }, //0.8 + 0 + 0
-                { 'A', 'B', 'P' }
+                { new WildcardSymbol(), new WildcardSymbol(), new AppleSymbol() }, //0 + 0 + 0.4
+                { new WildcardSymbol(), new BananaSymbol(), new WildcardSymbol() }, //0 + 0.6 + 0
+                { new PineappleSymbol(), new WildcardSymbol(), new WildcardSymbol() }, //0.8 + 0 + 0
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 1.8;
@@ -280,14 +282,14 @@ namespace SlotMachine.Tests
         }
 
         [Test]
-        public void OneLineOfWildcardCharactersWinsZero()
+        public void OneLineOfWildcardSymbolactersWinsZero()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { '*', '*', '*' }, //3 * 0
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' },
-                { 'A', 'B', 'P' }
+                { new WildcardSymbol(), new WildcardSymbol(), new WildcardSymbol() }, //3 * 0
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() },
+                { new AppleSymbol(), new BananaSymbol(), new PineappleSymbol() }
             };
 
             var expected = 0;
@@ -296,14 +298,14 @@ namespace SlotMachine.Tests
         }
 
         [Test]
-        public void WildcardCharactersEverywhereWinZero()
+        public void WildcardSymbolactersEverywhereWinZero()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { '*', '*', '*' }, //3 * 0
-                { '*', '*', '*' }, //3 * 0
-                { '*', '*', '*' }, //3 * 0
-                { '*', '*', '*' } //3 * 0
+                { new WildcardSymbol(), new WildcardSymbol(), new WildcardSymbol() }, //3 * 0
+                { new WildcardSymbol(), new WildcardSymbol(), new WildcardSymbol() }, //3 * 0
+                { new WildcardSymbol(), new WildcardSymbol(), new WildcardSymbol() }, //3 * 0
+                { new WildcardSymbol(), new WildcardSymbol(), new WildcardSymbol() } //3 * 0
             };
 
             var expected = 0;
@@ -314,12 +316,12 @@ namespace SlotMachine.Tests
         [Test]
         public void ExampleFromTheDocumentReturnsCorrectResult()
         {
-            var matrix = new char[,]
+            var matrix = new Symbol[,]
             {
-                { 'B', 'A', 'A' },
-                { 'A', 'A', 'A' }, //3 * 0.4
-                { 'A', '*', 'B' },
-                { '*', 'A', 'A' } //0 + 0.4 + 0.4
+                { new BananaSymbol(), new AppleSymbol(), new AppleSymbol() },
+                { new AppleSymbol(), new AppleSymbol(), new AppleSymbol() }, //3 * 0.4
+                { new AppleSymbol(), new WildcardSymbol(), new BananaSymbol() },
+                { new WildcardSymbol(), new AppleSymbol(), new AppleSymbol() } //0 + 0.4 + 0.4
             };
 
             var expected = 2;
